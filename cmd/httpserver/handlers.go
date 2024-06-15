@@ -10,7 +10,7 @@ import (
 )
 
 func (app *application) homeView(w http.ResponseWriter, r *http.Request) {
-	if err := view.Home().Render(r.Context(), w); err != nil {
+	if err := view.Home(view.AllPostEntries).Render(r.Context(), w); err != nil {
 		app.error(w, r, err)
 	}
 }
@@ -54,6 +54,34 @@ func (app *application) postView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := view.Post(entry).Render(r.Context(), w); err != nil {
+		app.error(w, r, err)
+	}
+}
+
+func (app *application) searchPartial(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+
+	var tags []string
+	tags, ok := r.URL.Query()["tags"]
+	if !ok {
+		tags = make([]string, 0)
+	}
+
+	var posts []view.PostSearchEntry
+
+	if len(tags) > 0 {
+		posts = filterByTags(view.AllPostEntries, tags)
+	} else {
+		posts = view.AllPostEntries
+	}
+
+	if query != "" {
+		similaritySort(posts, query)
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+
+	if err := view.PostList(posts).Render(r.Context(), w); err != nil {
 		app.error(w, r, err)
 	}
 }

@@ -1,0 +1,9 @@
+package view
+
+templ PostList(posts []PostSearchEntry) {
+	<ul>
+		for _, post := range posts {
+			<a href={ templ.URL(post.URL) }>{ post.Title }</a>
+		}
+	</ul>
+}

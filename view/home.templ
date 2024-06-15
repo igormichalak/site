@@ -1,7 +1,8 @@
 package view
 
-templ Home() {
+templ Home(posts []PostSearchEntry) {
 	@layout("") {
-		<p>Home</p>
+		<h2>Posts</h2>
+		@PostList(posts)
 	}
 }
