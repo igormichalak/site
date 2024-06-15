@@ -1,9 +1,15 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"os"
+)
 
 func (app *application) routes() http.Handler {
 	mux := http.NewServeMux()
 
-	return mux
+	fileServer := http.FileServerFS(os.DirFS("./public"))
+	mux.Handle("GET /", fileServer)
+
+	return app.recoverPanic(securityHeaders(mux))
 }
