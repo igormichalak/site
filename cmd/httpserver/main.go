@@ -58,6 +58,7 @@ func main() {
 		WriteTimeout:      12 * time.Second,
 		IdleTimeout:       time.Minute,
 		MaxHeaderBytes:    8_192,
+		ErrorLog:          slog.NewLogLogger(logger.Handler(), slog.LevelError),
 		TLSConfig: &tls.Config{
 			MinVersion: tls.VersionTLS12,
 			MaxVersion: tls.VersionTLS13,
