@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,11 +16,15 @@ import (
 
 const DefaultPort = "8080"
 
-type application struct{}
+type application struct {
+	Logger *slog.Logger
+	Debug  bool
+}
 
 func main() {
 	certFile := flag.String("cert-file", "./cert.pem", "certificate file path")
 	keyFile := flag.String("key-file", "./key.pem", "key file path")
+	debug := flag.Bool("debug", false, "debug mode")
 	flag.Parse()
 
 	port, exists := os.LookupEnv("PORT")
@@ -27,7 +32,23 @@ func main() {
 		port = DefaultPort
 	}
 
-	app := application{}
+	var logger *slog.Logger
+	if *debug {
+		handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		})
+		logger = slog.New(handler)
+	} else {
+		handler := slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
+			Level: slog.LevelInfo,
+		})
+		logger = slog.New(handler)
+	}
+
+	app := application{
+		Logger: logger,
+		Debug:  *debug,
+	}
 
 	srv := &http.Server{
 		Addr:              ":" + port,
