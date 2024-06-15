@@ -1,0 +1,25 @@
+package view
+
+templ navbar() {
+	<nav></nav>
+}
+
+templ layout(title string) {
+	<!DOCTYPE html>
+	<html lang="en" dir="ltr">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			if title != "" {
+				<title>{ title } - Igor Michalak</title>
+			} else {
+				<title>Igor Michalak</title>
+			}
+			<link href="/css/font.css" rel="stylesheet"/>
+			<link href="/css/main.css" rel="stylesheet"/>
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+}
