@@ -1,0 +1,25 @@
+:root {
+    color-scheme: only light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-synthesis: none;
+}
+
+@media not (prefers-reduced-motion) {
+    :root {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    display: flow-root;
+    overflow-x: clip;
+    margin: 0;
+}
+
+a,
+button {
+    touch-action: manipulation;
+}
