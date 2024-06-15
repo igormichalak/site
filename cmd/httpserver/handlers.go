@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/igormichalak/site/view"
 )
@@ -13,7 +16,27 @@ func (app *application) homeView(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) sitemap(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("sitemap"))
+	var s strings.Builder
+	s.WriteString(`<?xml version="1.0" encoding="UTF-8"?>`)
+	s.WriteString(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
+
+	for slug, entry := range view.PostIndex {
+		loc := fmt.Sprintf(`<loc>https://www.igormichalak.com/%s</loc>`, slug)
+		lastmod := fmt.Sprintf(`<lastmod>%s</lastmod>`, entry.CreatedAt.Format(time.DateOnly))
+
+		s.WriteString(`<url>`)
+		s.WriteString(loc)
+		s.WriteString(lastmod)
+		s.WriteString(`</url>`)
+	}
+
+	s.WriteString(`</urlset>`)
+
+	w.Header().Set("Content-Type", "application/xml")
+
+	if _, err := fmt.Fprint(w, s.String()); err != nil {
+		app.error(w, r, err)
+	}
 }
 
 func (app *application) postView(w http.ResponseWriter, r *http.Request) {
