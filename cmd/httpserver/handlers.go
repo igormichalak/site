@@ -20,8 +20,8 @@ func (app *application) sitemap(w http.ResponseWriter, r *http.Request) {
 	s.WriteString(`<?xml version="1.0" encoding="UTF-8"?>`)
 	s.WriteString(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
 
-	for slug, entry := range view.PostIndex {
-		loc := fmt.Sprintf(`<loc>https://www.igormichalak.com/%s</loc>`, slug)
+	for _, entry := range view.AllPostEntries {
+		loc := fmt.Sprintf(`<loc>%s</loc>`, entry.URL)
 		lastmod := fmt.Sprintf(`<lastmod>%s</lastmod>`, entry.CreatedAt.Format(time.DateOnly))
 
 		s.WriteString(`<url>`)
