@@ -2,11 +2,13 @@ package view
 
 import "time"
 
-templ PostList(posts []PostSearchEntry) {
+templ PostList(posts []PostSearchEntry, hlWords []string) {
 	<ul class="post-list">
 		for _, post := range posts {
 			<li>
-				<a href={ templ.URL(post.URL) } class="post-title">{ post.Title }</a>
+				<a href={ templ.URL(post.URL) } class="post-title">
+					@templ.Raw(highlight(post.Title, hlWords))
+				</a>
 				<span class="post-details">
 					<span class="font-mono">{ post.CreatedAt.Format(time.DateOnly) }</span>
 					&#32;&#x2014;&#32;

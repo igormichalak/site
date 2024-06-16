@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 	"time"
 
@@ -72,7 +73,7 @@ func (app *application) searchPartial(w http.ResponseWriter, r *http.Request) {
 	if len(tags) > 0 {
 		posts = filterByTags(view.AllPostEntries, tags)
 	} else {
-		posts = view.AllPostEntries
+		posts = slices.Clone(view.AllPostEntries)
 	}
 
 	if query != "" {
@@ -81,7 +82,7 @@ func (app *application) searchPartial(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html")
 
-	if err := view.PostList(posts).Render(r.Context(), w); err != nil {
+	if err := view.PostList(posts, words(query)).Render(r.Context(), w); err != nil {
 		app.error(w, r, err)
 	}
 }

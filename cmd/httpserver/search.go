@@ -91,7 +91,7 @@ func similaritySort(posts []view.PostSearchEntry, target string) {
 	targetWords := words(target)
 
 	slices.SortStableFunc(posts, func(a, b view.PostSearchEntry) int {
-		return cumulativeDistance(targetWords, words(b.Title)) - cumulativeDistance(targetWords, words(a.Title))
+		return cumulativeDistance(targetWords, words(a.Title)) - cumulativeDistance(targetWords, words(b.Title))
 	})
 }
 
@@ -104,7 +104,12 @@ func filterByTags(posts []view.PostSearchEntry, tags []string) []view.PostSearch
 	var filtered []entryWithTagCount
 
 	for _, post := range posts {
-		matches := overlap(post.Tags, tags)
+		var normalizedTags []string
+		for _, tag := range post.Tags {
+			normalizedTags = append(normalizedTags, view.NormalizeTag(tag))
+		}
+
+		matches := overlap(normalizedTags, tags)
 		if matches == 0 {
 			continue
 		}

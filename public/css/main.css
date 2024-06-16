@@ -59,6 +59,10 @@ hr {
     font-family: 'JetBrains Mono', monospace;
 }
 
+.hl {
+    background-color: yellow;
+}
+
 .row-1 {
     display: flex;
     gap: 1rem;

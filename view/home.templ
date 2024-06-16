@@ -2,7 +2,7 @@ package view
 
 import "strings"
 
-func formatTag(t string) string {
+func NormalizeTag(t string) string {
 	return strings.ReplaceAll(strings.ToLower(t), " ", "-")
 }
 
@@ -17,10 +17,10 @@ templ Home(posts []PostSearchEntry, tags []string) {
 		<ul class="tag-list">
 			for _, tag := range tags {
 				<li>
-					<button class="tag-btn" data-tag={ formatTag(tag) }>{ tag }</button>
+					<button class="tag-btn" data-tag={ NormalizeTag(tag) }>{ tag }</button>
 				</li>
 			}
 		</ul>
-		@PostList(posts)
+		@PostList(posts, nil)
 	}
 }

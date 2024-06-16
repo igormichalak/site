@@ -12,7 +12,7 @@ import "bytes"
 
 import "strings"
 
-func formatTag(t string) string {
+func NormalizeTag(t string) string {
 	return strings.ReplaceAll(strings.ToLower(t), " ", "-")
 }
 
@@ -45,9 +45,9 @@ func Home(posts []PostSearchEntry, tags []string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(formatTag(tag))
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(NormalizeTag(tag))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/home.templ`, Line: 20, Col: 54}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/home.templ`, Line: 20, Col: 57}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -60,7 +60,7 @@ func Home(posts []PostSearchEntry, tags []string) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(tag)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/home.templ`, Line: 20, Col: 62}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/home.templ`, Line: 20, Col: 65}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -75,7 +75,7 @@ func Home(posts []PostSearchEntry, tags []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = PostList(posts).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = PostList(posts, nil).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
