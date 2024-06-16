@@ -1,7 +1,27 @@
 package view
 
 templ navbar() {
-	<nav></nav>
+	<nav>
+		<ul class="link-list">
+			<li>
+				<a href="/">Home</a>
+			</li>
+			<li>
+				<a href="https://x.com/igorjmichalak">X</a>
+			</li>
+			<li>
+				<a href="https://github.com/igormichalak">GitHub</a>
+			</li>
+		</ul>
+	</nav>
+}
+
+templ footer() {
+	<footer>
+		<a href="https://github.com/igormichalak/site">Source</a>
+		<pre>&#32;&#x2022;&#32;</pre>
+		<span>All code snippets are under <a href="/0BSD.txt">0BSD</a> license.</span>
+	</footer>
 }
 
 templ layout(title string) {
@@ -17,9 +37,17 @@ templ layout(title string) {
 			}
 			<link href="/css/font.css" rel="stylesheet"/>
 			<link href="/css/main.css" rel="stylesheet"/>
+			<script type="module" src="/js/search.js" defer></script>
 		</head>
 		<body>
-			{ children... }
+			<div class="wrapper">
+				<h2>Igor Michalak</h2>
+				@navbar()
+				<main class="content">
+					{ children... }
+				</main>
+				@footer()
+			</div>
 		</body>
 	</html>
 }

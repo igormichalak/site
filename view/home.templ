@@ -1,8 +1,26 @@
 package view
 
-templ Home(posts []PostSearchEntry) {
+import "strings"
+
+func formatTag(t string) string {
+	return strings.ReplaceAll(strings.ToLower(t), " ", "-")
+}
+
+templ Home(posts []PostSearchEntry, tags []string) {
 	@layout("") {
-		<h2>Posts</h2>
+		<p>I like creating things that help people bring their creativity into the world.</p>
+		<hr/>
+		<div class="row-1">
+			<h2>Posts</h2>
+			<input type="text" id="search" name="search" placeholder="Search..." aria-label="Search posts"/>
+		</div>
+		<ul class="tag-list">
+			for _, tag := range tags {
+				<li>
+					<button class="tag-btn" data-tag={ formatTag(tag) }>{ tag }</button>
+				</li>
+			}
+		</ul>
 		@PostList(posts)
 	}
 }

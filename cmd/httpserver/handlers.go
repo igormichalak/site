@@ -10,7 +10,7 @@ import (
 )
 
 func (app *application) homeView(w http.ResponseWriter, r *http.Request) {
-	if err := view.Home(view.AllPostEntries).Render(r.Context(), w); err != nil {
+	if err := view.Home(view.AllPostEntries, view.AllTags).Render(r.Context(), w); err != nil {
 		app.error(w, r, err)
 	}
 }
