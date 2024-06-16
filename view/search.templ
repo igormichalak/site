@@ -1,9 +1,24 @@
 package view
 
+import "time"
+
 templ PostList(posts []PostSearchEntry) {
-	<ul>
+	<ul class="post-list">
 		for _, post := range posts {
-			<a href={ templ.URL(post.URL) }>{ post.Title }</a>
+			<li>
+				<a href={ templ.URL(post.URL) } class="post-title">{ post.Title }</a>
+				<span class="post-details">
+					<span class="font-mono">{ post.CreatedAt.Format(time.DateOnly) }</span>
+					&#32;&#x2014;&#32;
+					for i, tag := range post.Tags {
+						if i == 0 {
+							{ tag }
+						} else {
+							, { tag }
+						}
+					}
+				</span>
+			</li>
 		}
 	</ul>
 }

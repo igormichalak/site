@@ -55,6 +55,10 @@ hr {
     margin: 3rem 0;
 }
 
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
 .row-1 {
     display: flex;
     gap: 1rem;
@@ -73,6 +77,8 @@ hr {
 input#search {
     width: 12rem;
     height: 1.25rem;
+
+    font-size: 0.9rem;
 }
 
 .tag-list {
@@ -91,16 +97,40 @@ input#search {
     border: none;
     text-decoration: underline;
     white-space: nowrap;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 .tag-btn[data-selected='true'] {
-    background-color: #222;
+    background-color: #111;
     color: #DDD;
 }
 
 .tag-btn:hover {
     cursor: pointer;
+}
+
+.post-list {
+    margin: 3rem 0;
+    padding: 0;
+    list-style-type: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.post-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.post-title {
+    font-size: 1rem;
+}
+
+.post-details {
+    font-size: 0.9rem;
 }
 
 footer {

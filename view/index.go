@@ -30,7 +30,7 @@ var AllTags []string
 func init() {
 	for slug, entry := range PostIndex {
 		AllPostEntries = append(AllPostEntries, PostSearchEntry{
-			URL:       fmt.Sprintf("https://www.igormichalak.com/%s", slug),
+			URL:       fmt.Sprintf("https://www.igormichalak.com/p/%s", slug),
 			Title:     entry.Title,
 			Tags:      entry.Tags,
 			CreatedAt: entry.CreatedAt,
@@ -40,6 +40,7 @@ func init() {
 				AllTags = append(AllTags, tag)
 			}
 		}
+		slices.Sort(AllTags)
 	}
 	slices.SortFunc(AllPostEntries, func(a, b PostSearchEntry) int {
 		return int(b.CreatedAt.Unix() - a.CreatedAt.Unix())
