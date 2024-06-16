@@ -16,5 +16,5 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("GET /p/{slug}", app.postView)
 	mux.HandleFunc("GET /search", app.searchPartial)
 
-	return app.recoverPanic(securityHeaders(mux))
+	return app.recoverPanic(app.wwwRedirect(app.securityHeaders(mux)))
 }

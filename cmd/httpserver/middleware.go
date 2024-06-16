@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func securityHeaders(next http.Handler) http.Handler {
+func (app *application) securityHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		csp := []string{
 			"default-src 'self'",
@@ -48,6 +48,18 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 				app.error(w, r, fmt.Errorf("%s", err))
 			}
 		}()
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (app *application) wwwRedirect(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !app.Debug && !strings.HasPrefix(r.Host, "www.") {
+			dst := "https://www." + r.Host + r.URL.RequestURI()
+			http.Redirect(w, r, dst, http.StatusMovedPermanently)
+			return
+		}
 
 		next.ServeHTTP(w, r)
 	})
