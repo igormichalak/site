@@ -3,10 +3,10 @@ package view
 import "time"
 
 templ PostList(posts []PostSearchEntry, hlWords []string) {
-	if len(posts) == 0 {
-		<p>No posts found.</p>
-	}
 	<ul class="post-list">
+		if len(posts) == 0 {
+			<li>No posts found.</li>
+		}
 		for _, post := range posts {
 			<li>
 				<a href={ templ.URL(post.URL) } class="post-title">
