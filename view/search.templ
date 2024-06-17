@@ -3,6 +3,9 @@ package view
 import "time"
 
 templ PostList(posts []PostSearchEntry, hlWords []string) {
+	if len(posts) == 0 {
+		<p>No posts found.</p>
+	}
 	<ul class="post-list">
 		for _, post := range posts {
 			<li>
