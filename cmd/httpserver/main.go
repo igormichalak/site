@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"flag"
-	"log"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -76,22 +76,24 @@ func main() {
 	signal.Notify(stopC, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT)
 
 	go func() {
-		log.Printf("Starting server on %s...", srv.Addr)
+		logger.Info(fmt.Sprintf("Starting server on %s...", srv.Addr))
 
 		err := srv.ListenAndServeTLS(*certFile, *keyFile)
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("Server failed: %v", err)
+			logger.Error("Server failed", "err", err)
+			os.Exit(1)
 		}
 	}()
 
 	<-stopC
-	log.Print("Shutting down server...")
+	logger.Info("Shutting down server...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server shutdown failed: %v", err)
+		logger.Error("Server shutdown failed", "err", err)
+		os.Exit(1)
 	}
-	log.Print("Server gracefully stopped.")
+	logger.Info("Server gracefully stopped.")
 }
