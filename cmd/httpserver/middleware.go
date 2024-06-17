@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 )
+
+var untrackedPaths = []string{"/search", "/css", "/fonts", "/js", "/favicon.ico"}
 
 func (app *application) securityHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -62,5 +65,39 @@ func (app *application) wwwRedirect(next http.Handler) http.Handler {
 		}
 
 		next.ServeHTTP(w, r)
+	})
+}
+
+func formatDuration(d time.Duration) string {
+	if d.Seconds() >= 1 {
+		return fmt.Sprintf("%.2fs", float64(d.Milliseconds())/1e3)
+	}
+	if d.Milliseconds() >= 1 {
+		return fmt.Sprintf("%.2fms", float64(d.Microseconds())/1e3)
+	}
+	return fmt.Sprintf("%dμs", d.Microseconds())
+}
+
+func (app *application) logRequest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		for _, path := range untrackedPaths {
+			if strings.HasPrefix(r.URL.Path, path) {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		start := time.Now()
+
+		next.ServeHTTP(w, r)
+
+		var (
+			method  = r.Method
+			uri     = r.URL.RequestURI()
+			took    = formatDuration(time.Now().Sub(start))
+			referer = r.Referer()
+		)
+
+		app.Logger.Info("Request", "method", method, "uri", uri, "referer", referer, "took", took)
 	})
 }
